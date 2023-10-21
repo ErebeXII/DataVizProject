@@ -1,14 +1,16 @@
-import pandas as pd
 import branca
 from folium.plugins import MarkerCluster
 import folium
 import webbrowser
 
-csv_path = r"C:\Users\jacqu\Downloads\prix-carburants-fichier-instantane-test-ods-copie.csv"  # Provide path here
-df = pd.read_csv(csv_path, sep=";")
-
 
 def create_map(df):
+
+    """
+    :param df: Dataframe
+    :return: html of folium.Map
+    """
+
     df = df.copy()
     df.dropna(subset=["geom", "prix_valeur", "com_code"], inplace=True)
     df = df[["geom", "prix_valeur", "com_code"]]
@@ -44,8 +46,8 @@ def create_map(df):
             radius=30
         ).add_to(marker_cluster)
 
-    c.save("price_map.html")
-    webbrowser.open("price_map.html", new=2)  # new=2 opens in a new tab, if possible
+    # c.save("price_map.html")
+    # webbrowser.open("price_map.html", new=2)  # new=2 opens in a new tab, if possible
 
+    return c.get_root().render()
 
-create_map(df)
