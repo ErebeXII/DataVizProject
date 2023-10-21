@@ -1,9 +1,14 @@
+from turtle import st
+
 import pandas as pd
 import numpy as np
 import swifter
 import calplot
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+import folium
+from folium.plugins import MarkerCluster
+from streamlit_folium import folium_static
 
 
 def main_plot_calmap(create_csv=False,
@@ -83,12 +88,176 @@ def csv_for_price_per_date(path_original_csv, path_destination_csv):
     df.dropna(inplace=True)  # drop lines with missing date or price or name
 
     df.to_csv(path_destination_csv, sep=',', encoding='utf-8', index=False)
+def data_service(csv):
+    df = pd.read_csv(csv, sep=";")
+    df = df.dropna()
+    # print(df.columns)
+    df_service = df[["id", "services_service", "geom"]]
+    # print(df_service)
 
+    # On enlève les doublons, qui dans notre cas ne nous interesse pas.
+    df_service = df_service.drop_duplicates(subset="id")
+
+    # On transforme la chaine de caractere en une liste avec la longitude et la latitude.
+    df_service['geom'] = df_service['geom'].str.split(',')
+
+    # On Sépare les services en une liste.
+    df_service['services_separés'] = df_service['services_service'].str.split('//')
+
+    # Voici les valeurs uniques
+    valeurs_unique = df_service['services_separés'].explode().unique()
+    # print(valeurs_unique)
+    return df_service
+def map_Services_Sanitaires(origin_csv):
+
+    df_service = data_service(origin_csv)
+    m = folium.Map(location=[46.603354, 1.888334], zoom_start=6)
+    # Créez un groupe de clusters de marqueurs
+    marker_cluster = MarkerCluster().add_to(m)
+
+    values_to_check = ["Toilettes publiques", "Douches", "Espace bébé"]
+    # Ajoutez des marqueurs au groupe de clusters
+    for i in range(0, len(df_service)):
+        services = df_service.iloc[i]['services_separés']
+        if any(value in df_service.iloc[i]['services_separés'] for value in values_to_check):
+            services_str = ', '.join(services)
+            folium.Marker(
+                location=[float(df_service.iloc[i]['geom'][0]), float(df_service.iloc[i]['geom'][1])],
+                tooltip=df_service.iloc[i]['id'],
+                popup=services_str,
+            ).add_to(marker_cluster)
+    # call to render Folium map in Streamlit
+    folium_static(m)
+
+
+def map_Relais_Colis(origin_csv):
+    df_service = data_service(origin_csv)
+    m = folium.Map(location=[46.603354, 1.888334], zoom_start=6)
+    # Créez un groupe de clusters de marqueurs
+    marker_cluster = MarkerCluster().add_to(m)
+
+    values_to_check = ["Relais colis"]
+    # Ajoutez des marqueurs au groupe de clusters
+    for i in range(0, len(df_service)):
+        services = df_service.iloc[i]['services_separés']
+        if any(value in df_service.iloc[i]['services_separés'] for value in values_to_check):
+            services_str = ', '.join(services)
+            folium.Marker(
+                location=[float(df_service.iloc[i]['geom'][0]), float(df_service.iloc[i]['geom'][1])],
+                tooltip=df_service.iloc[i]['id'],
+                popup=services_str,
+            ).add_to(marker_cluster)
+    # call to render Folium map in Streamlit
+    folium_static(m)
+
+
+def map_Alimentation(origin_csv):
+    df_service = data_service(origin_csv)
+    m = folium.Map(location=[46.603354, 1.888334], zoom_start=6)
+    # Créez un groupe de clusters de marqueurs
+    marker_cluster = MarkerCluster().add_to(m)
+
+    values_to_check = ["Boutique alimentaire", "Restauration à emporter", "Restauration sur place", "Bar"]
+    # Ajoutez des marqueurs au groupe de clusters
+    for i in range(0, len(df_service)):
+        services = df_service.iloc[i]['services_separés']
+        if any(value in df_service.iloc[i]['services_separés'] for value in values_to_check):
+            services_str = ', '.join(services)
+            folium.Marker(
+                location=[float(df_service.iloc[i]['geom'][0]), float(df_service.iloc[i]['geom'][1])],
+                tooltip=df_service.iloc[i]['id'],
+                popup=services_str,
+            ).add_to(marker_cluster)
+    # call to render Folium map in Streamlit
+    folium_static(m)
+
+
+def map_Carburants(origin_csv):
+    df_service = data_service(origin_csv)
+    m = folium.Map(location=[46.603354, 1.888334], zoom_start=6)
+    # Créez un groupe de clusters de marqueurs
+    marker_cluster = MarkerCluster().add_to(m)
+
+    values_to_check = ["Vente de fioul domestique", "Vente de pétrole lampant", "Vente de gaz domestique (Butane, Propane)", "Carburant additivé", "GNV", "Vente d'additifs carburants"]
+    # Ajoutez des marqueurs au groupe de clusters
+    for i in range(0, len(df_service)):
+        services = df_service.iloc[i]['services_separés']
+        if any(value in df_service.iloc[i]['services_separés'] for value in values_to_check):
+            services_str = ', '.join(services)
+            folium.Marker(
+                location=[float(df_service.iloc[i]['geom'][0]), float(df_service.iloc[i]['geom'][1])],
+                tooltip=df_service.iloc[i]['id'],
+                popup=services_str,
+            ).add_to(marker_cluster)
+    # call to render Folium map in Streamlit
+    folium_static(m)
+
+
+def map_Services_Vehicules(origin_csv):
+    df_service = data_service(origin_csv)
+    m = folium.Map(location=[46.603354, 1.888334], zoom_start=6)
+    # Créez un groupe de clusters de marqueurs
+    marker_cluster = MarkerCluster().add_to(m)
+
+    values_to_check = ["Station de gonflage", "Location de véhicule", "Lavage manuel", "Lavage automatique", "Services réparation / entretien"]
+    # Ajoutez des marqueurs au groupe de clusters
+    for i in range(0, len(df_service)):
+        services = df_service.iloc[i]['services_separés']
+        if any(value in df_service.iloc[i]['services_separés'] for value in values_to_check):
+            services_str = ', '.join(services)
+            folium.Marker(
+                location=[float(df_service.iloc[i]['geom'][0]), float(df_service.iloc[i]['geom'][1])],
+                tooltip=df_service.iloc[i]['id'],
+                popup=services_str,
+            ).add_to(marker_cluster)
+    # call to render Folium map in Streamlit
+    folium_static(m)
+
+
+def map_Services_financiers(origin_csv):
+    df_service = data_service(origin_csv)
+    m = folium.Map(location=[46.603354, 1.888334], zoom_start=6)
+    # Créez un groupe de clusters de marqueurs
+    marker_cluster = MarkerCluster().add_to(m)
+
+    values_to_check = ["Automate CB 24/24", "DAB (Distributeur automatique de billets)"]
+    # Ajoutez des marqueurs au groupe de clusters
+    for i in range(0, len(df_service)):
+        services = df_service.iloc[i]['services_separés']
+        if any(value in df_service.iloc[i]['services_separés'] for value in values_to_check):
+            services_str = ', '.join(services)
+            folium.Marker(
+                location=[float(df_service.iloc[i]['geom'][0]), float(df_service.iloc[i]['geom'][1])],
+                tooltip=df_service.iloc[i]['id'],
+                popup=services_str,
+            ).add_to(marker_cluster)
+    # call to render Folium map in Streamlit
+    folium_static(m)
+
+def map_Services_Divers(origin_csv):
+    df_service = data_service(origin_csv)
+    m = folium.Map(location=[46.603354, 1.888334], zoom_start=6)
+    # Créez un groupe de clusters de marqueurs
+    marker_cluster = MarkerCluster().add_to(m)
+
+    values_to_check = ["Boutique non alimentaire", "Aire de camping-cars", "Piste poids lourds", "Bornes électriques", "Wifi", "Laverie"]
+    # Ajoutez des marqueurs au groupe de clusters
+    for i in range(0, len(df_service)):
+        services = df_service.iloc[i]['services_separés']
+        if any(value in df_service.iloc[i]['services_separés'] for value in values_to_check):
+            services_str = ', '.join(services)
+            folium.Marker(
+                location=[float(df_service.iloc[i]['geom'][0]), float(df_service.iloc[i]['geom'][1])],
+                tooltip=df_service.iloc[i]['id'],
+                popup=services_str,
+            ).add_to(marker_cluster)
+    # call to render Folium map in Streamlit
+    folium_static(m)
 
 main_plot_calmap(True)
 import streamlit as st
 import pandas as pd
-from price_map import create_map  # Assuming price_map.py is in the same directory
+#from price_map import create_map  # Assuming price_map.py is in the same directory
 
 
 def main():
@@ -103,7 +272,7 @@ def main():
     info = st.sidebar.checkbox("Show DataFrame Info", value=True)
     describe = st.sidebar.checkbox("Show Descriptive Stats", value=True)
     price_map = st.sidebar.checkbox("Show Price Map", value=True)
-
+    service_map = st.sidebar.checkbox("Show Service Map", value=True)
     # Display basic DataFrame information as a table
     if info:
         st.write("### DataFrame Info")
@@ -122,10 +291,46 @@ def main():
     # Display the map
     if price_map:
         st.write("### Price Map")
-        st.components.v1.html(create_map(df), width=800, height=600)
+        #st.components.v1.html(create_map(df), width=800, height=600)
 
-    # Future place for additional analysis modules
-    # ...
+    if service_map:
+        st.subheader("Filtres de station-services")
+        sub_option_1 = st.checkbox("Service Sanitaires")
+        if sub_option_1:
+            st.write("### Service Sanitaires")
+            st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
+                                  width=800, height=600)
+        sub_option_2 = st.checkbox("Sous-option 2")
+        if sub_option_2:
+            st.write("### Service Sanitaires")
+            st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
+                                  width=800, height=600)
+        sub_option_3 = st.checkbox("Sous-option 3")
+        if sub_option_3:
+            st.write("### Service Sanitaires")
+            st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
+                                  width=800, height=600)
+        sub_option_4 = st.checkbox("Sous-option 4")
+        if sub_option_4:
+            st.write("### Service Sanitaires")
+            st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
+                                  width=800, height=600)
+        sub_option_5 = st.checkbox("Sous-option 5")
+        if sub_option_5:
+            st.write("### Service Sanitaires")
+            st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
+                                  width=800, height=600)
+        sub_option_6 = st.checkbox("Sous-option 6")
+        if sub_option_6:
+            st.write("### Service Sanitaires")
+            st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
+                                  width=800, height=600)
+        sub_option_7 = st.checkbox("Sous-option 7")
+        if sub_option_7:
+            st.write("### Service Sanitaires")
+            st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
+                                  width=800, height=6002)
+
 
 
 # Running the app
