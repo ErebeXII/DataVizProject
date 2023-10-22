@@ -6,6 +6,8 @@ import pandas as pd
 from price_map import create_map  # Assuming price_map.py is in the same directory
 from price_calendar import main_plot_calmap
 from service_map import data_service, map_Services_Sanitaires, map_Relais_Colis, map_Alimentation, map_Carburants, map_Services_Vehicules, map_Services_financiers, map_Services_Divers
+from avg_price_bar_chart import plot_avg_price_by_fuel
+from fuel_histogram import plot_fuel_histogram
 
 
 def main():
@@ -41,7 +43,7 @@ def main():
     # Display the map
     if price_map:
         st.write("### Price Map")
-        st.components.v1.html(create_map(df), width=800, height=600)
+        create_map(df)
 
     if service_map:
         st.subheader("Filtres de station-services")
@@ -91,6 +93,11 @@ def main():
     if price_calendar:
         st.write("### Price Calendar")
         main_plot_calmap(True)
+
+    st.write("## Prix moyen par type de carburant")
+    st.pyplot(plot_avg_price_by_fuel())
+    st.write("## Prix moyen par type de carburant")
+    st.pyplot(plot_fuel_histogram())
 
     # Future place for additional analysis modules
     # ...
