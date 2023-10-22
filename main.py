@@ -298,38 +298,45 @@ def main():
         sub_option_1 = st.checkbox("Service Sanitaires")
         if sub_option_1:
             st.write("### Service Sanitaires")
+            st.write("Toilettes publiques, Douches, Espace bébé")
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
-        sub_option_2 = st.checkbox("Sous-option 2")
+        sub_option_2 = st.checkbox("Service Livraison")
         if sub_option_2:
-            st.write("### Service Sanitaires")
+            st.write("### Service Livraison")
+            st.write("Relais colis")
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
-        sub_option_3 = st.checkbox("Sous-option 3")
+        sub_option_3 = st.checkbox("Service Alimentaire")
         if sub_option_3:
-            st.write("### Service Sanitaires")
+            st.write("### Service Alimentaire")
+            st.write("Boutique alimentaire, Restauration à emporter, Restauration sur place, Bar")
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
-        sub_option_4 = st.checkbox("Sous-option 4")
+        sub_option_4 = st.checkbox("Service Carburants")
         if sub_option_4:
-            st.write("### Service Sanitaires")
+            st.write("### Service Carburants")
+            st.write("Vente de fioul domestique, Vente de pétrole lampant, Vente de gaz domestique (Butane, Propane), Carburant additivé, GNV, Vente d'additifs carburants")
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
-        sub_option_5 = st.checkbox("Sous-option 5")
+        sub_option_5 = st.checkbox("Service Véhicules")
         if sub_option_5:
-            st.write("### Service Sanitaires")
+            st.write("### Service Véhicules")
+            st.write("Station de gonflage, Location de véhicule, Lavage manuel, Lavage automatique, Services réparation / entretien")
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
-        sub_option_6 = st.checkbox("Sous-option 6")
+        sub_option_6 = st.checkbox("Service FInanciers")
         if sub_option_6:
-            st.write("### Service Sanitaires")
+            st.write("### Service FInanciers")
+            st.write("Automate CB 24/24, DAB (Distributeur automatique de billets)")
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
-        sub_option_7 = st.checkbox("Sous-option 7")
+        sub_option_7 = st.checkbox("Service Divers")
         if sub_option_7:
-            st.write("### Service Sanitaires")
+            st.write("### Service Divers")
+            st.write("Boutique non alimentaire, Aire de camping-cars, Piste poids lourds, Bornes électriques, Wifi, Laverie")
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
-                                  width=800, height=6002)
+                                  width=800, height=600)
 
 
 
