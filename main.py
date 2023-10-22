@@ -257,6 +257,8 @@ def map_Services_Divers(origin_csv):
 main_plot_calmap(True)
 import streamlit as st
 import pandas as pd
+from price_map import create_map  # Assuming price_map.py is in the same directory
+from price_calendar import main_plot_calmap
 #from price_map import create_map  # Assuming price_map.py is in the same directory
 
 
@@ -272,6 +274,8 @@ def main():
     info = st.sidebar.checkbox("Show DataFrame Info", value=True)
     describe = st.sidebar.checkbox("Show Descriptive Stats", value=True)
     price_map = st.sidebar.checkbox("Show Price Map", value=True)
+    price_calendar = st.sidebar.checkbox("Show Price Calendar", value=True)
+
     service_map = st.sidebar.checkbox("Show Service Map", value=True)
     # Display basic DataFrame information as a table
     if info:
@@ -291,7 +295,7 @@ def main():
     # Display the map
     if price_map:
         st.write("### Price Map")
-        #st.components.v1.html(create_map(df), width=800, height=600)
+        st.components.v1.html(create_map(df), width=800, height=600)
 
     if service_map:
         st.subheader("Filtres de station-services")
@@ -338,6 +342,12 @@ def main():
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
 
+    if price_calendar:
+        st.write("### Price Calendar")
+        main_plot_calmap(True)
+
+    # Future place for additional analysis modules
+    # ...
 
 
 # Running the app
