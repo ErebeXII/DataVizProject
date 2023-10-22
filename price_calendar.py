@@ -1,6 +1,4 @@
 import pandas as pd
-import numpy as np
-import swifter
 import calplot
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -78,7 +76,7 @@ def csv_for_price_per_date(path_original_csv, path_destination_csv):
 
     df = df[["prix_maj", "prix_nom", "prix_valeur"]]
     df["prix_maj"] = pd.to_datetime(df["prix_maj"])
-    df["prix_maj"] = df["prix_maj"].swifter.apply(lambda x: x.date())
+    df["prix_maj"] = df["prix_maj"].apply(lambda x: x.date())
 
     df.rename(columns={"prix_maj": "date", "prix_nom": "name", "prix_valeur": "price"}, errors="raise", inplace=True)
 
