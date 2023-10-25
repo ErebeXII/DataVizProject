@@ -21,15 +21,15 @@ def main():
     info = st.sidebar.checkbox("Show DataFrame Info", value=True)
     describe = st.sidebar.checkbox("Show Descriptive Stats", value=True)
     price_map = st.sidebar.checkbox("Show Price Map", value=True)
+    service_map = st.sidebar.checkbox("Show Service Map", value=True)
     price_calendar = st.sidebar.checkbox("Show Price Calendar", value=True)
     matplot_scatter1 = st.sidebar.checkbox("Show Scatter matplotlib", value=True)
     st_line1 = st.sidebar.checkbox("Show ST Line", value=True)
     st_scatter1 = st.sidebar.checkbox("Show ST SCATTER", value=True)
+    avg_price_barplot = st.sidebar.checkbox("Show Average Fuel Price Bar Chart", value=True)
+    fuel_histogram = st.sidebar.checkbox("Show Fuel Histogram", value=True)
     bar_chart = st.sidebar.checkbox("Show Bar Chart", value=True)
     pie_chart = st.sidebar.checkbox("Show Pie Chart", value=True)
-    service_map = st.sidebar.checkbox("Show Service Map", value=True)
-    avg_price_barplot = st.sidebar.checkbox("Show Average Price Bar Chart", value=True)
-    fuel_histogram = st.sidebar.checkbox("Show Fuel Histogram", value=True)
 
     # Display basic DataFrame information as a table
     if info:
@@ -46,11 +46,12 @@ def main():
         st.write("### Statistiques Descriptives")
         st.write(df.describe())
 
-    # Display the map
+    # Display the prices map
     if price_map:
         st.write("### Carte des Prix")
         create_map(df)
 
+    # Display the services map with its selectbox
     if service_map:
         st.subheader("Filtres de station-services")
 
@@ -93,6 +94,7 @@ def main():
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
 
+    # Display the calendars of prices
     if price_calendar:
         st.write("### Calendriers des Prix")
         main_plot_calmap(True)
@@ -109,10 +111,12 @@ def main():
         st.write("### st scatter plot")
         st_scatter(r"prix-carburants-fichier-instantane-test-ods-copie.csv")
 
+    # Display barplot of "Prix moyen par type de carburant"
     if avg_price_barplot:
         st.write("## Prix moyen par type de carburant")
         st.pyplot(plot_avg_price_by_fuel())
 
+    # Display histogram of "Prix du carburant au cours du temps"
     if fuel_histogram:
         st.write("## Prix du carburant au cours du temps ")
         plot_st_fuels()
@@ -125,9 +129,6 @@ def main():
     if pie_chart:
         st.write("### Pie Chart")
         st.pyplot(pie_chart_services())
-
-    # Future place for additional analysis modules
-    # ...
 
 
 # Running the app
