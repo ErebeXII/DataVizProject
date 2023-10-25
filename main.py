@@ -1,18 +1,12 @@
-import folium
-from folium.plugins import MarkerCluster
-from streamlit_folium import folium_static
 import streamlit as st
 import pandas as pd
-from price_map import create_map  # Assuming price_map.py is in the same directory
+from price_map import create_map
 from price_calendar import main_plot_calmap
 from service_map import data_service, map_Services_Sanitaires, map_Relais_Colis, map_Alimentation, map_Carburants, map_Services_Vehicules, map_Services_financiers, map_Services_Divers
-
 from plot_alexis import st_line,st_scatter, read_csv,categorize_services,categorize_services1, matplot_scatter
-
-
 from avg_price_bar_chart import plot_avg_price_by_fuel
-from fuel_histogram import plot_fuel_histogram
-from pie_chart_sevices import bar_chart_small_services
+from fuel_histogram import plot_st_fuels
+from pie_chart_sevices import bar_chart_small_services, pie_chart_services
 
 
 def main():
@@ -28,18 +22,18 @@ def main():
     describe = st.sidebar.checkbox("Show Descriptive Stats", value=True)
     price_map = st.sidebar.checkbox("Show Price Map", value=True)
     price_calendar = st.sidebar.checkbox("Show Price Calendar", value=True)
-
     matplot_scatter1 = st.sidebar.checkbox("Show Scatter matplotlib", value=True)
     st_line1 = st.sidebar.checkbox("Show ST Line", value=True)
-    st_scatter1 = st.sidebar.checkbox("Show st SCATTER", value=True)
-
+    st_scatter1 = st.sidebar.checkbox("Show ST SCATTER", value=True)
     bar_chart = st.sidebar.checkbox("Show Bar Chart", value=True)
-
-
+    pie_chart = st.sidebar.checkbox("Show Pie Chart", value=True)
     service_map = st.sidebar.checkbox("Show Service Map", value=True)
+    avg_price_barplot = st.sidebar.checkbox("Show Average Price Bar Chart", value=True)
+    fuel_histogram = st.sidebar.checkbox("Show Fuel Histogram", value=True)
+
     # Display basic DataFrame information as a table
     if info:
-        st.write("### DataFrame Info")
+        st.write("### DataFrame Infos")
         info_df = pd.DataFrame({
             'Column': df.columns,
             'Non-Null Count': df.count(),
@@ -49,63 +43,59 @@ def main():
 
     # Show descriptive statistics
     if describe:
-        st.write("### Descriptive Statistics")
+        st.write("### Statistiques Descriptives")
         st.write(df.describe())
 
     # Display the map
     if price_map:
-        st.write("### Price Map")
+        st.write("### Carte des Prix")
         create_map(df)
 
     if service_map:
         st.subheader("Filtres de station-services")
-        sub_option_1 = st.checkbox("Service Sanitaires")
-        if sub_option_1:
+
+        service_options = ["Service Sanitaires", "Service Livraison", "Service Alimentaire", "Service Carburants", "Service Véhicules", "Service Financiers", "Service Divers"]
+        selected_service = st.selectbox("Select a service", service_options)
+
+        if selected_service == "Service Sanitaires":
             st.write("### Service Sanitaires")
             st.write("Toilettes publiques, Douches, Espace bébé")
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
-        sub_option_2 = st.checkbox("Service Livraison")
-        if sub_option_2:
+        if selected_service == "Service Livraison":
             st.write("### Service Livraison")
             st.write("Relais colis")
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
-        sub_option_3 = st.checkbox("Service Alimentaire")
-        if sub_option_3:
+        if selected_service == "Service Alimentaire":
             st.write("### Service Alimentaire")
             st.write("Boutique alimentaire, Restauration à emporter, Restauration sur place, Bar")
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
-        sub_option_4 = st.checkbox("Service Carburants")
-        if sub_option_4:
+        if selected_service == "Service Carburants":
             st.write("### Service Carburants")
             st.write("Vente de fioul domestique, Vente de pétrole lampant, Vente de gaz domestique (Butane, Propane), Carburant additivé, GNV, Vente d'additifs carburants")
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
-        sub_option_5 = st.checkbox("Service Véhicules")
-        if sub_option_5:
+        if selected_service == "Service Véhicules":
             st.write("### Service Véhicules")
             st.write("Station de gonflage, Location de véhicule, Lavage manuel, Lavage automatique, Services réparation / entretien")
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
-        sub_option_6 = st.checkbox("Service FInanciers")
-        if sub_option_6:
+        if selected_service == "Service Financiers":
             st.write("### Service FInanciers")
             st.write("Automate CB 24/24, DAB (Distributeur automatique de billets)")
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
-        sub_option_7 = st.checkbox("Service Divers")
-        if sub_option_7:
+        if selected_service == "Service Divers":
             st.write("### Service Divers")
             st.write("Boutique non alimentaire, Aire de camping-cars, Piste poids lourds, Bornes électriques, Wifi, Laverie")
             st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
 
     if price_calendar:
-        st.write("### Price Calendar")
+        st.write("### Calendriers des Prix")
         main_plot_calmap(True)
-
 
     if matplot_scatter1:
         st.write("### Scatter plot")
@@ -119,20 +109,25 @@ def main():
         st.write("### st scatter plot")
         st_scatter(r"prix-carburants-fichier-instantane-test-ods-copie.csv")
 
-    st.write("## Prix moyen par type de carburant")
-    st.pyplot(plot_avg_price_by_fuel())
-    st.write("## Prix moyen par type de carburant")
-    st.pyplot(plot_fuel_histogram())
+    if avg_price_barplot:
+        st.write("## Prix moyen par type de carburant")
+        st.pyplot(plot_avg_price_by_fuel())
 
-    # add a st.bar chart
+    if fuel_histogram:
+        st.write("## Prix du carburant au cours du temps ")
+        plot_st_fuels()
+
     if bar_chart:
         st.write("### Bar Chart")
-        st.pyplot(bar_chart_small_services())
+        df_small_services = bar_chart_small_services()
+        st.bar_chart(df_small_services)
 
+    if pie_chart:
+        st.write("### Pie Chart")
+        st.pyplot(pie_chart_services())
 
     # Future place for additional analysis modules
     # ...
-
 
 
 # Running the app
