@@ -6,9 +6,14 @@ import pandas as pd
 from price_map import create_map  # Assuming price_map.py is in the same directory
 from price_calendar import main_plot_calmap
 from service_map import data_service, map_Services_Sanitaires, map_Relais_Colis, map_Alimentation, map_Carburants, map_Services_Vehicules, map_Services_financiers, map_Services_Divers
+
+from plot_alexis import st_line,st_scatter, read_csv,categorize_services,categorize_services1, matplot_scatter
+
+
 from avg_price_bar_chart import plot_avg_price_by_fuel
 from fuel_histogram import plot_fuel_histogram
 from pie_chart_sevices import bar_chart_small_services
+
 
 def main():
     st.title("Fuel Price Analysis")
@@ -23,7 +28,13 @@ def main():
     describe = st.sidebar.checkbox("Show Descriptive Stats", value=True)
     price_map = st.sidebar.checkbox("Show Price Map", value=True)
     price_calendar = st.sidebar.checkbox("Show Price Calendar", value=True)
+
+    matplot_scatter1 = st.sidebar.checkbox("Show Scatter matplotlib", value=True)
+    st_line1 = st.sidebar.checkbox("Show ST Line", value=True)
+    st_scatter1 = st.sidebar.checkbox("Show st SCATTER", value=True)
+
     bar_chart = st.sidebar.checkbox("Show Bar Chart", value=True)
+
 
     service_map = st.sidebar.checkbox("Show Service Map", value=True)
     # Display basic DataFrame information as a table
@@ -95,6 +106,19 @@ def main():
         st.write("### Price Calendar")
         main_plot_calmap(True)
 
+
+    if matplot_scatter1:
+        st.write("### Scatter plot")
+        matplot_scatter(r"prix-carburants-fichier-instantane-test-ods-copie.csv")
+
+    if st_line1:
+        st.write("### ST LINE plot")
+        st_line(r"prix-carburants-fichier-instantane-test-ods-copie.csv")
+
+    if st_scatter1:
+        st.write("### st scatter plot")
+        st_scatter(r"prix-carburants-fichier-instantane-test-ods-copie.csv")
+
     st.write("## Prix moyen par type de carburant")
     st.pyplot(plot_avg_price_by_fuel())
     st.write("## Prix moyen par type de carburant")
@@ -108,6 +132,7 @@ def main():
 
     # Future place for additional analysis modules
     # ...
+
 
 
 # Running the app
