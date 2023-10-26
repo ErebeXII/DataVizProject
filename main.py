@@ -10,7 +10,7 @@ from pie_chart_sevices import bar_chart_small_services, pie_chart_services
 
 
 def main():
-    st.title("Fuel Price Analysis")
+    st.title("Fuel Price Analysis by UNG, PERIER and ZHANG")
 
     # Load Data
     csv_path = "prix-carburants-fichier-instantane-test-ods-copie.csv"
@@ -100,15 +100,12 @@ def main():
         main_plot_calmap(True)
 
     if matplot_scatter1:
-        st.write("### Scatter plot")
         matplot_scatter(r"prix-carburants-fichier-instantane-test-ods-copie.csv")
 
     if st_line1:
-        st.write("### ST LINE plot")
         st_line(r"prix-carburants-fichier-instantane-test-ods-copie.csv")
 
     if st_scatter1:
-        st.write("### st scatter plot")
         st_scatter(r"prix-carburants-fichier-instantane-test-ods-copie.csv")
 
     # Display barplot of "Prix moyen par type de carburant"
