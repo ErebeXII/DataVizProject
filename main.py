@@ -3,7 +3,7 @@ import pandas as pd
 from price_map import create_map
 from price_calendar import main_plot_calmap
 from service_map import data_service, map_Services_Sanitaires, map_Relais_Colis, map_Alimentation, map_Carburants, map_Services_Vehicules, map_Services_financiers, map_Services_Divers
-from plot_alexis import st_line,st_scatter, read_csv,categorize_services,categorize_services1, matplot_scatter
+from plot_alexis import st_line,st_scatter, read_csv,categorize_services, matplot_scatter
 from avg_price_bar_chart import plot_avg_price_by_fuel
 from fuel_histogram import plot_st_fuels
 from pie_chart_sevices import bar_chart_small_services, pie_chart_services
@@ -66,32 +66,32 @@ def main():
         if selected_service == "Service Livraison":
             st.write("### Service Livraison")
             st.write("Relais colis")
-            st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
+            st.components.v1.html(map_Relais_Colis(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
         if selected_service == "Service Alimentaire":
             st.write("### Service Alimentaire")
             st.write("Boutique alimentaire, Restauration à emporter, Restauration sur place, Bar")
-            st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
+            st.components.v1.html(map_Alimentation(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
         if selected_service == "Service Carburants":
             st.write("### Service Carburants")
             st.write("Vente de fioul domestique, Vente de pétrole lampant, Vente de gaz domestique (Butane, Propane), Carburant additivé, GNV, Vente d'additifs carburants")
-            st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
+            st.components.v1.html(map_Carburants(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
         if selected_service == "Service Véhicules":
             st.write("### Service Véhicules")
             st.write("Station de gonflage, Location de véhicule, Lavage manuel, Lavage automatique, Services réparation / entretien")
-            st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
+            st.components.v1.html(map_Services_Vehicules(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
         if selected_service == "Service Financiers":
             st.write("### Service FInanciers")
             st.write("Automate CB 24/24, DAB (Distributeur automatique de billets)")
-            st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
+            st.components.v1.html(map_Services_financiers(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
         if selected_service == "Service Divers":
             st.write("### Service Divers")
             st.write("Boutique non alimentaire, Aire de camping-cars, Piste poids lourds, Bornes électriques, Wifi, Laverie")
-            st.components.v1.html(map_Services_Sanitaires(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
+            st.components.v1.html(map_Services_Divers(r"prix-carburants-fichier-instantane-test-ods-copie.csv"),
                                   width=800, height=600)
 
     # Display the calendars of prices
